@@ -1,8 +1,6 @@
 ---
 title: "Good practice for writing R code and R packages"
-subtitle: "https://magali.richard.io/good_coding_practices/rpresentation.html 
-Slides very closely following http://style.tidyverse.org/, and Julian and Alexis presentation https://jarbel.github.io/Rgoodpractice/rpresentation.html
-"
+subtitle: "https://magali.richard.io/good_coding_practices/rpresentation.html"
 author: "[Magali Richard](http://www.julyanarbel.com/) & [Lydiane Agier](http://mistis.inrialpes.fr/people/arnaud/)"
 date: "March 28, 2019"
 output:
@@ -21,12 +19,22 @@ options(htmltools.dir.version = FALSE)
 knitr::opts_chunk$set(echo = FALSE, fig.align = "center", dev = "svg")
 ```
 
+class: center, middle
+
+Slides very closely following:
+
+http://style.tidyverse.org/
+
+and Julian and Alexis presentation:
+
+https://jarbel.github.io/Rgoodpractice/rpresentation.html
+
+
+---
+
 class: center, middle, inverse
 
-
-
-# 1. R coding style
-
+# 2. Create R packages
 
 ---
 
@@ -276,6 +284,42 @@ Use the `devtools::spell_check()` function.
 
 ---
 
+---
+
+## Saving files 
+
+When saving files in R, you may overwrite existing files without being noticed.
+
+To ensure you are not overwriting a file, you may type
+
+```{r, eval=FALSE, echo=TRUE}
+name= "name.Rdata"
+if (!file.exists(name)) save(data,file=name) 
+``` 
+
+---
+
+## Updating R versions
+
+In order to update the version of R and copy (or moving) all packages:
+
+```{r, eval=FALSE, echo=TRUE}
+if(!require(installr)) {
+install.packages("installr"); require(installr)} #load / install+load installr
+ 
+updateR()
+``` 
+You will be asked a number of questions to inquire if you wish to review the NEWS of the latest R version, to copy and update all of your packages
+to your new R version, erase all of the packages from your old R installation, etc.
+
+Alternatively you can type
+
+ 
+```{r, eval=FALSE, echo=TRUE} 
+updateR(F, T, T, F, T, F, T) # install R version, move packages, update packages, quit R.
+  
+``` 
+
 ## References
 
 To complete:
@@ -476,14 +520,11 @@ class: center, middle, inverse
 
 Presentation available at
 
-https://jarbel.github.io/Rgoodpractice/rpresentation.html
+https://magali.richard.io/good_coding_practices/rpresentation.html
 
 <br>
 
-http://www.julyanarbel.com/ & http://mistis.inrialpes.fr/people/arnaud/
+[Magali Richard](http://membres-timc.imag.fr/Magali.Richard/) & Lydiane Agier
 
-Twitter: [@julyanarbel](https://twitter.com/julyanarbel)
-
-GitHub: [@jarbel](https://github.com/jarbel) & [@A-Alexis](https://github.com/A-Alexis)
 
 .footnote[Slides created via the R package [**xaringan**](https://github.com/yihui/xaringan).]
