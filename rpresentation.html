@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+  <head>
+    <title>Good practice for writing R code and R packages</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Magali Richard &amp; Lydiane Agier" />
+    <meta name="date" content="2019-03-28" />
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link href="libs/remark-css/default-fonts.css" rel="stylesheet" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Good practice for writing R code and R packages
+## <a href="https://magali.richard.io/good_coding_practices/rpresentation.html" class="uri">https://magali.richard.io/good_coding_practices/rpresentation.html</a> Slides very closely following <a href="http://style.tidyverse.org/" class="uri">http://style.tidyverse.org/</a>, and Julian and Alexis presentation <a href="https://jarbel.github.io/Rgoodpractice/rpresentation.html" class="uri">https://jarbel.github.io/Rgoodpractice/rpresentation.html</a>
+### <a href="http://www.julyanarbel.com/">Magali Richard</a> &amp; <a href="http://mistis.inrialpes.fr/people/arnaud/">Lydiane Agier</a>
+### March 28, 2019
+
+---
+
+
+
+
+class: center, middle, inverse
+
+
+
+# 1. R coding style
+
+
+---
+
+## Names and structure
+
+### File names
+
+
+```r
+# Good
+fit_models.R
+utility_functions.R
+
+# Bad
+fit models.R
+foo.r
+stuff.r
+```
+
+### Structure of the script
+
+
+
+```r
+# Load data ---------------------------
+
+# Plot data ---------------------------
+```
+
+
+---
+
+## Syntax
+
+### Object names
+
+Strive for names that are concise and meaningful.
+
+
+```r
+# Good
+day_one
+day_1
+
+# Bad
+first_day_of_the_month
+DayOne
+dayone
+djm1
+```
+
+Avoid using already existing names.
+
+
+```r
+# Bad
+T &lt;- FALSE
+c &lt;- 10
+mean &lt;- function(x) sum(x)
+```
+
+
+---
+
+## Spacing
+
+Any style guide is fundamentally opinionated...
+
+
+```r
+# Good Hadley
+average &lt;- mean((feet / 12) + inches, na.rm = TRUE)
+sqrt(x^2 + y^2)
+x &lt;- 1:10
+base::get
+
+# Good Alexis
+average &lt;- mean(
+  ( feet / 12 ) + inches 
+  , na.rm = TRUE
+)
+sqrt( x^2 + y^2 )
+x &lt;- 1:10
+base::get
+
+# Bad
+average&lt;-mean(feet/12 + inches,na.rm=TRUE)
+sqrt(x ^ 2 + y ^ 2)
+x &lt;- 1 : 10
+base :: get
+```
+
+---
+
+## Indenting
+
+
+```r
+# Good
+if (y &lt; 0 &amp;&amp; debug) {
+  message("y is negative")
+}
+
+# Bad
+if (y &lt; 0 &amp;&amp; debug)
+  message("Y is negative")
+```
+
+---
+
+## Long lines
+
+Strive to limit your code to 80 characters per line.
+
+
+```r
+# Good
+do_something_very_complicated(
+  something = "that",
+  requires = many,
+  arguments = "some of which may be long"
+)
+
+# Bad
+do_something_very_complicated("that", requires, many, arguments,
+                              "some of which may be long"
+)
+```
+
+---
+
+### Assignment
+
+
+```r
+# Good
+x &lt;- 5
+
+# Bad
+x = 5 
+```
+
+---
+
+## Automatic styling
+
+You can use `Ctrl + Shift + A` or `Command + Shift + A` or 
+
+*Rstudio &gt; Code &gt; Reformat code*
+
+&lt;img src="fig/code-menu.png" width="20%" style="display: block; margin: auto;" /&gt;
+
+Or `lintr`, `styler`, `prettycode` packages
+
+
+```r
+install.packages(c("lintr", "styler", "prettycode"))
+library("lintr")
+library("styler")
+```
+
+---
+
+### lintr package
+
+lintr can be used o a source file, eg `bad_style.R` being the following source:
+
+
+```r
+# Spacing 
+average&lt;-mean(feet/12 + inches,na.rm=TRUE)
+sqrt(x ^ 2 + y ^ 2)
+x &lt;- 1 : 10
+base :: get
+
+# Indenting
+if (y &lt; 0 &amp;&amp; debug)
+  message("Y is negative")
+
+# Assignment
+x = 5
+```
+
+Then run
+
+
+```r
+lint("bad_style.R")
+```
+
+
+---
+
+### lintr package
+
+&lt;img src="https://camo.githubusercontent.com/20dbcc29a25f1e86dcde02d2056508c322f6ae05/687474703a2f2f692e696d6775722e636f6d2f50494b6e70626e2e706e67" width="90%" style="display: block; margin: auto;" /&gt;
+
+
+---
+
+### styler package
+
+&lt;img src="https://raw.githubusercontent.com/lorenzwalthert/some_raw_data/master/styler_0.1.gif" width="100%" style="display: block; margin: auto;" /&gt;
+
+---
+
+### styler package
+
+You can use the `style_text()` function as follows
+
+
+```r
+ugly_code &lt;- "a&lt;-function( x){1+1}           "
+style_text(ugly_code)
+```
+
+
+
+```r
+# Bad
+a&lt;-function( x){1+1}
+
+# Good
+a &lt;- function(x) {
+  1 + 1
+}
+```
+
+
+---
+
+### styler package
+
+As well as the following variants of `style_text()`:
+
+* `style_file()` styles .R and/or .Rmd files.
+* `style_dir()` styles all .R files in a directory.
+* `style_pkg()` styles the source files of an R package.
+* RStudio Addins for styling the active file, styling the current package and styling the highlighted code region.
+
+---
+
+## Other tidying packages
+
+**Get automatic advice about your package**
+
+Install and run `goodpractice` package for *Advice (that) includes functions and syntax to avoid, package structure, code complexity, code formatting, etc.*
+
+!!Not working anymore!!
+
+**Remove typos!**
+
+Use the `devtools::spell_check()` function. 
+
+---
+
+## References
+
+To complete:
+* http://style.tidyverse.org/
+* https://cran.r-project.org/web/packages/rockchalk/vignettes/Rstyle.pdf
+* https://journal.r-project.org/archive/2012-2/RJournal_2012-2_Baaaath.pdf
+* https://cran.r-project.org/doc/manuals/R-ints.html
+* https://google.github.io/styleguide/Rguide.xml
+* https://www.r-project.org/conferences/useR-2004/Keynotes/Maechler.pdf
+* https://stat.ethz.ch/Teaching/maechler/R/useR_2014/Maechler-2014-pr.pdf
+* http://andrewgelman.com/2007/09/18/style_guide_for/
+* http://blog.jom.link/ten_rules_reproductible_research.html
+
+---
+
+class: center, middle, inverse
+
+# 2. Create R packages
+
+---
+
+## System settings - Customization of R profile
+
+Create a R profile file `.Rprofile` with the path to your local
+library if you use local libraries into your code, e.g :
+
+
+```r
+  .libPaths(new="~/R_libs")
+```
+
+See
+http://gettinggeneticsdone.blogspot.com/2013/06/customize-rprofile.html
+for more informations. 
+
+---
+
+## Package skeleton
+
+Create a directory with the name of your package, e.g. `MyPackage`,
+with inside:
+* the sub-directory `R` for the R source code
+* the file `DESCRIPTION` for meta-informations on your package.
+
+
+```r
+dir.create(
+    path = "MyPackage" )
+dir.create(
+    path = paste(
+        "MyPackage"
+      , "R"
+      , sep = .Platform$file.sep ) )
+file.create(
+    path = paste(
+        "MyPackage"
+      , "DESCRIPTION"
+      , sep = .Platform$file.sep ) )
+```
+
+---
+
+### DESCRIPTION file
+
+
+```r
+cat( c(
+    "Package: MyPackage"
+  , "Version: 0.1"
+  , "Date: 2018-02-08"
+  , "Type: Package"
+  , "Title: My nice package"
+  , "Author: A. Arnaud"
+  , "Maintainer: Alexis Arnaud &lt;alexis.arnaud@inria.fr&gt;"
+  , "Description: Basic package to display 2 ggplot2 plots."
+  , "License: GPLv3"
+  , "URL: https://github.com/jarbel/Rgoodpractice.git" )
+  , file = paste(
+        "MyPackage"
+      , "DESCRIPTION"
+      , sep = .Platform$file.sep )
+  , sep = "\n"
+  , append = TRUE )
+```
+
+---
+
+### R code files
+
+multiplot : http://www.cookbook-r.com/Graphs/Multiple_graphs_on_one_page_(ggplot2)/
+
+
+```r
+cat( c(
+ "plot_boxplot &lt;- function(data) {
+  if ( !is.data.frame(x = data) ) data &lt;- as.data.frame(x = data)
+  data_melt &lt;- melt(data = data)
+  plot_pairs &lt;- ggpairs(data = data)
+  plot_boxplot &lt;- ggplot(
+    data = data_melt
+    , aes(
+      x = variable
+      , y = value
+      , fill=variable)
+  ) + geom_boxplot( )
+  multiplot(
+    plot_pairs
+    , plot_boxplot
+    , cols = 2)
+  }" )
+  , file = "plot_functions.R"
+  , sep = "\n"
+  , append = TRUE )
+```
+
+---
+
+## R code documentation
+
+Use the Roxygen templates to start the documentation:
+&lt;img src="RStudio_-_Insert_Roxygen_Skeleton.png" width="75%" style="display: block; margin: auto;" /&gt;
+
+---
+
+## R code documentation
+
+And fill the Roxygen fields in order to best describe your function:
+* Title of the function
+* @description Some description
+* @param &lt;parameter name&gt; name of each parameter and a short description (type, default value ...)
+* @return value of the function output
+* @author author of the function
+* @seealso link to other functions or packages, e.g. \code{ \link[GGally]{ggpairs} } 
+* @keywords some keywords for the code indexation
+* @examples one or several examples on how to use the function
+* @importFrom &lt;package name&gt; &lt;function name&gt; to import some package or functions during the installation and the loading of the function
+* @export
+
+---
+
+## Documentation generation with roxygen2
+
+Now, you just need to move your R files to the R directory of your package, and
+then run Roxygen before building and installing your package.
+
+
+```r
+library(package = "roxygen2")
+
+for ( file in c( "plot_functions.R", "multiplot.R" ) ) {
+file.copy( from = file
+        , to = paste(
+              "MyPackage"
+            , "R"
+            , file
+            , sep = .Platform$file.sep ) ) }
+
+roxygenize(
+  package.dir = "MyPackage"
+  , clean = TRUE )
+
+library(package = "tools")
+Rcmd(args = "build MyPackage")
+
+## or with a shell : R CMD build MyPackage
+
+install.packages(pkgs = "MyPackage_0.1.tar.gz")
+library(package = "MyPackage")
+```
+
+---
+
+## Test
+
+
+```r
+n_col &lt;- 3
+n_row &lt;- 1e3
+
+m_test &lt;- t(
+  x = matrix(
+    data = rnorm(
+      n = n_col * n_row
+      , mean = 0
+      , sd = 1
+    )
+    , nrow = n_col
+    , ncol = n_row
+    , dimnames = list(
+      "Variables" = paste("V ", seq_len(length.out = n_col), sep = "")
+      , "Observations" = NULL
+    )
+  ) * c(0.1, 1, 3) + c(-1, 1, 0)
+)
+
+plot_boxplot(data = m_test)
+```
+
+---
+
+## Test
+
+&lt;img src="R_plot_-_Example.png" width="75%" style="display: block; margin: auto;" /&gt;
+
+---
+
+## References
+
+To complete:
+* https://cran.r-project.org/doc/contrib/Leisch-CreatingPackages.pdf
+* http://kbroman.org/pkg_primer/
+* https://github.com/klutometis/roxygen
+* http://r-pkgs.had.co.nz/
+* https://support.rstudio.com/hc/en-us/articles/200486488-Developing-Packages-with-RStudio
+* https://www.r-bloggers.com/how-to-write-and-debug-an-r-function/
+* https://nicercode.github.io/guides/functions/
+* https://swcarpentry.github.io/r-novice-inflammation/06-best-practices-R/
+
+---
+
+class: center, middle, inverse
+
+# Thanks!
+
+&lt;br&gt;
+
+Presentation available at
+
+https://jarbel.github.io/Rgoodpractice/rpresentation.html
+
+&lt;br&gt;
+
+http://www.julyanarbel.com/ &amp; http://mistis.inrialpes.fr/people/arnaud/
+
+Twitter: [@julyanarbel](https://twitter.com/julyanarbel)
+
+GitHub: [@jarbel](https://github.com/jarbel) &amp; [@A-Alexis](https://github.com/A-Alexis)
+
+.footnote[Slides created via the R package [**xaringan**](https://github.com/yihui/xaringan).]
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();</script>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+<script>
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
