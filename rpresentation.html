@@ -175,9 +175,21 @@ do_something_very_complicated("that", requires, many, arguments,
 ```r
 # Good
 x &lt;- 5
-
 # Bad
 x = 5 
+```
+
+In general, = should be used to give parameters values in a function, 
+&lt;- should be used to give a value to an object.
+For example, 
+
+
+```r
+x &lt;- y= 5
+median(z=1:10)
+z
+median(z &lt;- 1:10)
+z
 ```
 
 ---
@@ -513,12 +525,12 @@ head(simus)
 
 ```
 ##         chr  start   stop gene_id score strand ref_genome
-## gene_1 chr1  33913  35476  gene_1    NA      -       simu
-## gene_2 chr1 222749 228410  gene_2    NA      -       simu
-## gene_3 chr1 822145 825787  gene_3    NA      -       simu
-## gene_4 chr1  68707  83334  gene_4    NA      -       simu
-## gene_5 chr1 630837 636554  gene_5    NA      +       simu
-## gene_6 chr1 551226 564530  gene_6    NA      -       simu
+## gene_1 chr1 859626 878870  gene_1    NA      -       simu
+## gene_2 chr1 835600 837249  gene_2    NA      +       simu
+## gene_3 chr1 467102 470345  gene_3    NA      +       simu
+## gene_4 chr1 980689 995707  gene_4    NA      +       simu
+## gene_5 chr1 662763 664829  gene_5    NA      -       simu
+## gene_6 chr1 125269 140522  gene_6    NA      -       simu
 ```
 
 ```r
