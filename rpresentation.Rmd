@@ -34,7 +34,7 @@ https://jarbel.github.io/Rgoodpractice/rpresentation.html
 
 class: center, middle, inverse
 
-# 2. Create R packages
+# 1. R coding style
 
 ---
 
@@ -284,8 +284,6 @@ Use the `devtools::spell_check()` function.
 
 ---
 
----
-
 ## Saving files 
 
 When saving files in R, you may overwrite existing files without being noticed.
@@ -319,6 +317,9 @@ Alternatively you can type
 updateR(F, T, T, F, T, F, T) # install R version, move packages, update packages, quit R.
   
 ``` 
+
+
+---
 
 ## References
 
