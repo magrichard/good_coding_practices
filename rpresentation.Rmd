@@ -160,7 +160,18 @@ x <- 5
 # Bad
 x = 5 
 ```
+In general, = should be used to give parameters values in a function, 
+<- should be used to give a value to an object.
+For example, 
 
+```{r, eval=TRUE, echo=TRUE}
+x <- y= 5
+
+median(z=1:10)
+z
+median(z <- 1:10)
+z
+```
 ---
 
 ## Automatic styling
